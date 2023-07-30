@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OpqTagMapper">
+
+    <resultMap id="OpqTagResultMap" type="OpqTag">
+        <id property="tagId" column="tag_id"/>
+        <result property="tagName" column="tag_name"/>
+    </resultMap>
+
+    <sql id="selectOpqTagVo">
+        select tag_id, tag_name from tb_tag_list
+    </sql>
+
+    <insert id="insertTag" parameterType="OpqTag">
+        insert into tb_tag_list(tag_id, tag_name) VALUES (#{tagId},#{tagName})
+    </insert>
+    
+    <insert id="insertTagList" parameterType="OpqTag">
+        insert into tb_tag_list(tag_id, tag_name,delete_flag) VALUES
+        <foreach collection="list" item="tag" separator=",">
+            (#{tag.tagId},#{tag.tagName},1)
+        </foreach>
+        on duplicate key update
+        tag_name = values(tag_name),
+        delete_flag = 1
+    </insert>
+
+    <select id="selectOpqTagByTagId" parameterType="long" resultMap="OpqTagResultMap">
+        <include refid="selectOpqTagVo"/>
+        where tag_id = #{tagId} and delete_flag != 0
+    </select>
+
+    <select id="selectTagList" resultMap="OpqTagResultMap" parameterType="OpqTag">
+        <include refid="selectOpqTagVo"/>
+        <where>
+            <if test="tagName != null  and tagName != ''"> and tag_name like concat('%', #{tagName}, '%')</if>
+            and delete_flag != 0
+        </where>
+    </select>
+
+    <insert id="insertOpqTag" parameterType="OpqTag">
+        insert into tb_tag_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tagId != null">#{tagId},</if>
+            <if test="tagName!=null and tagName != ''">#{tagName}</if>
+        </trim>
+    </insert>
+    
+    <update id="updateOpqTag" parameterType="OpqTag">
+        update tb_tag_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tagName != null">tag_name = #{tagName},</if>
+        </trim>
+        where tag_id = #{tagId}
+    </update>
+
+    <delete id="deleteOpqTagByTagId" parameterType="long">
+        delete from tb_tag_list where tag_id = #{tagId}
+    </delete>
+
+    <delete id="deleteOpqTagByTagIds">
+        delete from tb_tag_list where tag_id in
+        <foreach collection="array" item="tagId" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+    </delete>
+
+    <update id="updateOpqTagDeleteFlag">
+        update tb_tag_list set delete_flag = 0
+    </update>
+</mapper>

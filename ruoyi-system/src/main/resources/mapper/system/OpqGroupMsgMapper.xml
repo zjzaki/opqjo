@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OpqGroupMsgMapper">
+
+    <resultMap id="OpqGroupMsgMap" type="OpqGroupMsg">
+        <result property="msgId" column="msg_id"/>
+        <result property="groupUin" column="group_uin"/>
+        <result property="botUin" column="bot_uin"/>
+        <result property="senderUin" column="sender_uin"/>
+        <result property="senderNick" column="sender_nick"/>
+        <result property="flag" column="flag"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="msgType" column="msg_type"/>
+        <result property="c2cCmd" column="c2c_cmd"/>
+        <result property="msgSeq" column="msg_seq"/>
+        <result property="msgTime" column="msg_time"/>
+        <result property="msgRandom" column="msg_random"/>
+        <result property="msgUid" column="msg_uid"/>
+        <result property="groupCard" column="group_card"/>
+        <result property="groupCode" column="group_code"/>
+        <result property="groupInfoSeq" column="group_info_seq"/>
+        <result property="groupLevel" column="group_level"/>
+        <result property="groupRank" column="group_rank"/>
+        <result property="groupType" column="group_type"/>
+        <result property="groupName" column="group_name"/>
+        <result property="subMsgType" column="sub_msg_type"/>
+        <result property="context" column="context"/>
+        <result property="atUinLists" column="at_uin_lists"/>
+        <result property="images" column="images"/>
+        <result property="videos" column="videos"/>
+        <result property="voice" column="voice"/>
+        <result property="redBagInfo" column="red_bag_info"/>
+        <result property="revokeFlag" column="revoke_flag"/>
+        <result property="revokeAdminUin" column="revoke_admin_uin"/>
+        <result property="revokeUin" column="revoke_uin"/>
+        <result property="revokeTime" column="revokeTime"/>
+    </resultMap>
+
+    <insert id="insertGroupMsg" parameterType="OpqGroupMsg">
+
+        insert into tb_group_msg_${groupCode}(
+        <if test="groupUin != null and groupUin !=0">group_uin,</if>
+        <if test="botUin != null and botUin !=0">bot_uin,</if>
+        <if test="senderUin != null and senderUin !=0">sender_uin,</if>
+        <if test="senderNick != null and senderNick !=''">sender_nick,</if>
+        <if test="msgType != null and msgType !=0">msg_type,</if>
+        <if test="c2cCmd != null and c2cCmd !=0">c2c_cmd,</if>
+        <if test="msgSeq != null and msgSeq !=0">msg_seq,</if>
+        <if test="msgTime != null and msgTime !=0">msg_time,</if>
+        <if test="msgRandom != null and msgRandom !=0">msg_random,</if>
+        <if test="msgUid != null and msgUid !=0">msg_uid,</if>
+        <if test="groupCard != null and groupCard !=''">group_card,</if>
+        <if test="groupCode != null and groupCode !=0">group_code,</if>
+        <if test="groupInfoSeq != null and groupInfoSeq !=0">group_info_seq,</if>
+        <if test="groupLevel != null and groupLevel !=0">group_level,</if>
+        <if test="groupRank != null and groupRank !=0">group_rank,</if>
+        <if test="groupType != null and groupType !=0">group_type,</if>
+        <if test="groupName != null and groupName !=''">group_name,</if>
+        <if test="subMsgType != null">sub_msg_type,</if>
+        <if test="context != null and context !=''">context,</if>
+        <if test="atUinLists != null and atUinLists !=''">at_uin_lists,</if>
+        <if test="images != null and images !=''">images,</if>
+        <if test="videos != null and videos !=''">videos,</if>
+        <if test="voice != null and voice !=''">voice,</if>
+        <if test="redBagInfo != null and redBagInfo !=''">redbag_info,</if>
+        <if test="revokeFlag != null and revokeFlag !=''">revoke_flag,</if>
+        <if test="revokeAdminUin != null and revokeAdminUin !=0">revoke_admin_uin,</if>
+        <if test="revokeUin != null and revokeUin !=0">revoke_uin,</if>
+        <if test="revokeTime != null and revokeTime !=0">revoke_time,</if>
+        flag
+        ) VALUES(
+        <if test="groupUin != null and groupUin !=0">#{groupUin},</if>
+        <if test="botUin != null and botUin !=0">#{botUin},</if>
+        <if test="senderUin != null and senderUin !=0">#{senderUin},</if>
+        <if test="senderNick != null and senderNick !=''">#{senderNick},</if>
+        <if test="msgType != null and msgType !=0">#{msgType},</if>
+        <if test="c2cCmd != null and c2cCmd !=0">#{c2cCmd},</if>
+        <if test="msgSeq != null and msgSeq !=0">#{msgSeq},</if>
+        <if test="msgTime != null and msgTime !=0">#{msgTime},</if>
+        <if test="msgRandom != null and msgRandom !=0">#{msgRandom},</if>
+        <if test="msgUid != null and msgUid !=0">#{msgUid},</if>
+        <if test="groupCard != null and groupCard !=''">#{groupCard},</if>
+        <if test="groupCode != null and groupCode !=0">#{groupCode},</if>
+        <if test="groupInfoSeq != null and groupInfoSeq !=0">#{groupInfoSeq},</if>
+        <if test="groupLevel != null and groupLevel !=0">#{groupLevel},</if>
+        <if test="groupRank != null and groupRank !=0">#{groupRank},</if>
+        <if test="groupType != null and groupType !=0">#{groupType},</if>
+        <if test="groupName != null and groupName !=''">#{groupName},</if>
+        <if test="subMsgType != null">#{subMsgType},</if>
+        <if test="context != null and context !=''">#{context},</if>
+        <if test="atUinLists != null and atUinLists !=''">#{atUinLists},</if>
+        <if test="images != null and images !=''">#{images},</if>
+        <if test="videos != null and videos !=''">#{videos},</if>
+        <if test="voice != null and voice !=''">#{voice},</if>
+        <if test="redBagInfo != null and redBagInfo !=''">#{redbagInfo},</if>
+        <if test="revokeFlag != null and revokeFlag !=''">#{revokeFlag},</if>
+        <if test="revokeAdminUin != null and revokeAdminUin !=0">#{revokeAdminUin},</if>
+        <if test="revokeUin != null and revokeUin !=0">#{revokeUin},</if>
+        <if test="revokeTime != null and revokeTime !=0">#{revokeTime},</if>
+        #{flag}
+        )
+    </insert>
+
+    <select id="existTable" parameterType="string" resultType="int">
+        select COUNT(1) as flag
+        from information_schema.TABLES
+        where TABLE_SCHEMA = 'opqj'
+          and TABLE_NAME = #{tableName};
+    </select>
+    <select id="selectOpqGroupMsgFlashback" resultMap="OpqGroupMsgMap" parameterType="OpqGroupMsg">
+        select msg_id,
+               group_uin,
+               bot_uin,
+               sender_uin,
+               sender_nick,
+               flag,
+               msg_type,
+               c2c_cmd,
+               msg_seq,
+               msg_time,
+               msg_random,
+               msg_uid,
+               group_card,
+               group_code,
+               group_info_seq,
+               group_level,
+               group_rank,
+               group_type,
+               group_name,
+               sub_msg_type,
+               context,
+               at_uin_lists,
+               images,
+               videos,
+               voice,
+               redbag_info,
+               revoke_flag,
+               revoke_admin_uin,
+               revoke_uin,
+               revoke_time
+        from tb_group_msg_${groupUin} ORDER BY msg_time desc
+    </select>
+
+    <update id="createNewGroupMsgTable" parameterType="string">
+        CREATE TABLE ${tableName}
+        (
+            `msg_id`           bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '消息ID',
+            `group_uin`        bigint                                                        NULL DEFAULT NULL COMMENT '群号',
+            `bot_uin`          bigint                                                        NULL DEFAULT NULL COMMENT '机器人id',
+            `sender_uin`       bigint                                                        NULL DEFAULT NULL COMMENT '发消息人qq号',
+            `sender_nick`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发消息人的昵称',
+            `flag`             tinyint(1)                                                    NULL DEFAULT NULL,
+            `msg_type`         int                                                           NULL DEFAULT NULL COMMENT '消息类型',
+            `c2c_cmd`          int                                                           NULL DEFAULT NULL COMMENT 'c2c消息类型',
+            `msg_seq`          bigint                                                        NULL DEFAULT NULL,
+            `msg_time`         bigint                                                        NULL DEFAULT NULL,
+            `msg_random`       bigint                                                        NULL DEFAULT NULL,
+            `msg_uid`          bigint                                                        NULL DEFAULT NULL,
+            `group_card`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '本群昵称',
+            `group_code`       bigint                                                        NULL DEFAULT NULL COMMENT '群号',
+            `group_info_seq`   bigint                                                        NULL DEFAULT NULL,
+            `group_level`      int                                                           NULL DEFAULT NULL,
+            `group_rank`       int                                                           NULL DEFAULT NULL,
+            `group_type`       int                                                           NULL DEFAULT NULL,
+            `group_name`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+            `sub_msg_type`     int                                                           NULL DEFAULT NULL COMMENT '//0为单一或复合类型消息(文字 At 图片 自由组合)\r\n   12 Xml消息 19 Video消息 51 JSON卡片消息',
+            `context`          text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci         NULL,
+            `at_uin_lists`     text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci         NULL,
+            `images`           text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci         NULL,
+            `videos`           text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci         NULL,
+            `voice`            text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci         NULL,
+            `redbag_info`      text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci         NULL,
+            `revoke_flag`      tinyint                                                       NULL DEFAULT NULL,
+            `revoke_admin_uin` bigint                                                        NULL DEFAULT NULL,
+            `revoke_uin`       bigint                                                        NULL DEFAULT NULL,
+            `revoke_time`      int                                                           NULL DEFAULT NULL,
+            PRIMARY KEY (`msg_id`) USING BTREE
+        ) ENGINE = MyISAM
+          AUTO_INCREMENT = 1
+          CHARACTER SET = utf8mb4
+          COLLATE = utf8mb4_unicode_ci
+          ROW_FORMAT = Dynamic;
+    </update>
+</mapper>

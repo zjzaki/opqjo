@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DbTableStatusMapper">
+
+    <select id="showTableStatus" resultType="com.ruoyi.system.domain.DbTableStatus">
+        show table status
+        where name in (
+        <foreach collection="list" item="g" separator=",">'tb_group_msg_${g.groupCode}'</foreach>
+        )
+    </select>
+</mapper>

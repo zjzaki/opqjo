@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OpqFriendMapper">
+
+    <resultMap id="opqFriendResultMap" type="OpqFriend">
+        <result property="tagId" column="tag_id"/>
+    </resultMap>
+
+    <sql id="selectOpqFriendVo">
+        select uin, uid, nick, head, sex, signature, tag_id from tb_friendlist
+    </sql>
+
+    <insert id="insertFriendList" parameterType="OpqFriend">
+        insert into tb_friendlist(uin, uid, nick, head, sex, signature, tag_id,delete_flag) VALUES
+        <foreach collection="list" item="friend" separator=",">
+            (#{friend.uin},#{friend.uid},#{friend.nick},#{friend.head},#{friend.sex},#{friend.signature},#{friend.tagId},1)
+        </foreach>
+        on duplicate key update
+        nick = values(nick),
+        head = values(head),
+        sex = values(sex),
+        signature = values(signature),
+        tag_id = values(tag_id),
+        delete_flag = 1
+    </insert>
+
+    <select id="selectOpqFriendList" parameterType="OpqFriend" resultMap="opqFriendResultMap">
+        <include refid="selectOpqFriendVo"/>
+        <where>
+            <if test="tagId != null and tagId != 0">tag_id = #{tagId}</if>
+            and delete_flag != 0
+        </where>
+    </select>
+
+    <update id="updateOpqAllFriendDeleteFlag">
+        update tb_friendlist set delete_flag = 0;
+    </update>
+</mapper>

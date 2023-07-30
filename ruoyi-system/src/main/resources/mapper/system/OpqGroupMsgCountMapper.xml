@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OpqGroupMsgCountMapper">
+
+    <resultMap id="opqGroupMsgCountMap" type="OpqGroupMsgCount">
+        <result property="groupCode" column="group_code"/>
+        <result property="msgCount" column="msg_count"/>
+        <result property="lastSpeakTime" column="last_speak_time"/>
+        <result property="groupName" column="group_name"/>
+    </resultMap>
+
+    <insert id="insertOpqGroupMsgCountList" parameterType="OpqGroupMsgCount">
+        insert into tb_group_msg_count(group_code, date, msg_count, last_speak_time) VALUES
+        <foreach collection="list" item="msgCountVo" separator=",">
+            (#{msgCountVo.groupCode},#{msgCountVo.date},#{msgCountVo.msgCount},#{msgCountVo.lastSpeakTime})
+        </foreach>
+        on duplicate key update
+         msg_count = values(msg_count),
+         last_speak_time = values(last_speak_time)
+    </insert>
+
+    <select id="getOpqGroupMsgCountToday" parameterType="OpqGroup"
+            resultType="com.ruoyi.system.domain.OpqGroupMsgCount">
+    </select>
+
+    <select id="getOpqGroupMsgCountList" parameterType="OpqGroupMsgCount" resultMap="opqGroupMsgCountMap">
+        SELECT m.group_code, date, msg_count, last_speak_time, group_name from tb_group_msg_count as m,tb_grouplist as g
+        WHERE m.group_code = g.group_code ORDER BY m.date desc,msg_count desc
+    </select>
+</mapper>

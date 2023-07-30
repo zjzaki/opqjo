@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OpqGroupMapper">
+
+    <resultMap id="OpqGroupMap" type="OpqGroup">
+        <result property="groupCode" column="group_code"/>
+        <result property="groupName" column="group_name"/>
+        <result property="memberCnt" column="member_cnt"/>
+        <result property="groupCnt" column="group_cnt"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectOpqGroupVo">
+        select group_code, group_name, member_cnt, group_cnt, create_time
+        from tb_grouplist
+    </sql>
+
+    <insert id="insertOpqGroupList" parameterType="OpqGroup">
+        insert into tb_grouplist(group_code, group_name, member_cnt, group_cnt, create_time,delete_flag) VALUES
+        <foreach collection="list" item="group" separator=",">
+            (#{group.groupCode},#{group.groupName},#{group.memberCnt},#{group.groupCnt},#{group.createTime},1)
+        </foreach>
+        on duplicate key update
+        group_name = values(group_name),
+        member_cnt = values(member_cnt),
+        group_cnt = values(group_cnt),
+        create_time = values(create_time),
+        delete_flag = 1
+    </insert>
+
+
+
+    <select id="selectOpqGroupByGroupCode" parameterType="long" resultMap="OpqGroupMap">
+        <include refid="selectOpqGroupVo"/>
+        where group_code = #{groupCode}
+        and delete_flag = 1
+    </select>
+
+    <select id="selectOpqGroupList" parameterType="OpqGroup" resultMap="OpqGroupMap">
+        <include refid="selectOpqGroupVo"/>
+        <where>
+            <if test="groupName != null  and groupName != ''">and group_name like concat('%', #{groupName}, '%')</if>
+            <if test="memberCnt != null ">and member_cnt = #{memberCnt}</if>
+            <if test="groupCnt != null ">and group_cnt = #{groupCnt}</if>
+            and delete_flag = 1
+        </where>
+    </select>
+    
+    <insert id="insertOpqGroup" parameterType="OpqGroup">
+        insert into tb_grouplist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupCode != null">group_code,</if>
+            <if test="groupName != null">group_name,</if>
+            <if test="memberCnt != null">member_cnt,</if>
+            <if test="groupCnt != null">group_cnt,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupCode != null">#{groupCode},</if>
+            <if test="groupName != null">#{groupName},</if>
+            <if test="memberCnt != null">#{memberCnt},</if>
+            <if test="groupCnt != null">#{groupCnt},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOpqGroup" parameterType="OpqGroup">
+        update tb_grouplist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="groupName != null">group_name = #{groupName},</if>
+            <if test="memberCnt != null">member_cnt = #{memberCnt},</if>
+            <if test="groupCnt != null">group_cnt = #{groupCnt},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where group_code = #{groupCode}
+    </update>
+
+    <delete id="deleteOpqGroupByGroupCode" parameterType="long">
+        delete from tb_grouplist where group_code = #{groupCode}
+    </delete>
+
+    <delete id="deleteOpqGroupByGroupCodes" parameterType="string">
+        delete from tb_grouplist in
+        <foreach collection="array" item="groupCode" open="(" separator="," close=")">
+            #{groupCode}
+        </foreach>
+    </delete>
+
+    <update id="updateAllGroupDeleteFlag">
+        update tb_grouplist set delete_flag = 0
+    </update>
+</mapper>

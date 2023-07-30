@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OpqPluginMapper">
+
+    <resultMap id="groupPluginMap" type="OpqGroupPlugin">
+        <result property="groupCode" column="group_code"/>
+        <result property="groupName" column="group_name"/>
+        <result property="pluginId" column="plugin_id"/>
+    </resultMap>
+
+    <sql id="selectOpqGroupMemberVo">
+        select id, name, `desc`, enable
+        from tb_plugins
+    </sql>
+
+    <insert id="addPlugin" parameterType="OpqPlugin">
+        insert into tb_plugins(id, name, `desc`, enable)
+        VALUES(#{id},#{name},#{desc},#{enable})
+    </insert>
+
+    <select id="selectOpqPluginByName" parameterType="string" resultType="com.ruoyi.system.domain.OpqPlugin">
+        <include refid="selectOpqGroupMemberVo"/>
+        <where>
+            <if test="name != null and name != ''">and name = #{name}</if>
+        </where>
+    </select>
+
+    <select id="selectPluginList" resultType="OpqPlugin">
+        <include refid="selectOpqGroupMemberVo"/>
+    </select>
+
+    <select id="selectGroupPluginListByPluginId" resultMap="groupPluginMap">
+        select group_code, group_name, plugin_id, admins
+        from tb_plugin_group
+        where plugin_id = #{pluginId}
+    </select>
+
+    <select id="selectGroupPluginList" resultMap="groupPluginMap" parameterType="OpqGroupPlugin">
+        select group_code, group_name, plugin_id, admins from tb_plugin_group
+        <where>
+            <if test="groupCode !=null and groupCode !=0">and group_code = #{groupCode}</if>
+        </where>
+    </select>
+
+    <!--开启插件-->
+    <insert id="addGroupPlugin" parameterType="OpqGroupPlugin">
+        insert into tb_plugin_group(group_code, group_name, plugin_id)
+        VALUES(#{groupCode},#{groupName},#{pluginId})
+    </insert>
+
+    <insert id="addGroupPlugins" parameterType="OpqGroupPlugin">
+        insert into tb_plugin_group(group_code, group_name, plugin_id)
+        VALUES
+        <foreach collection="list" item="groupPlugin" separator=",">
+            (#{groupPlugin.groupCode},#{groupPlugin.groupName},#{groupPlugin.pluginId})
+        </foreach>
+    </insert>
+
+    <!--关闭插件-->
+    <delete id="deleteGroupPlugin" parameterType="long">
+        delete from tb_plugin_group where group_code = #{groupCode}
+    </delete>
+</mapper>
