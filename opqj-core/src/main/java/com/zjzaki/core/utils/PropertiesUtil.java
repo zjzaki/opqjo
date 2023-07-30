@@ -27,7 +27,7 @@ public class PropertiesUtil {
             bot.setIp(properties.getProperty("ip"));
             bot.setPort(Integer.valueOf(properties.getProperty("port")));
             bot.setBotId(Long.valueOf(properties.getProperty("botId")));
-
+            bot.setMaxSpeechesPerMinute(Integer.valueOf(properties.getProperty("maxSpeechesPerMinute")));
         } catch (Exception e) {
             e.printStackTrace();
         }finally {

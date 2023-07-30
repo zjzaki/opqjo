@@ -1,6 +1,8 @@
 package com.zjzaki.core.action;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import com.zjzaki.core.pojo.Bot;
 import com.zjzaki.core.pojo.FileCommand;
 import com.zjzaki.core.pojo.FileType;
@@ -20,6 +22,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -29,6 +32,8 @@ import java.util.List;
  * @create 2023年04月07日 08:40:04
  */
 public class Action {
+
+    private static RedisCache redisCache;
 
     private static String result = "";
     /**
@@ -51,6 +56,11 @@ public class Action {
      * OPQBot的端口
      */
     private static int port;
+
+    /**
+     * 每分钟每群的最大发言条数
+     */
+    private static int maxSpeechesPerMinute;
     /**
      * 发送消息格式的JSON对象
      */
@@ -65,6 +75,8 @@ public class Action {
         ip = bot.getIp();
         port = bot.getPort();
         botId = bot.getBotId();
+        maxSpeechesPerMinute = bot.getMaxSpeechesPerMinute();
+        redisCache = SpringUtils.getBean("redisCache");
     }
 
     /**
@@ -76,6 +88,11 @@ public class Action {
      * @return 返回的结果
      */
     public static String post(Bot bot, String funcName, JSONObject msgJson) {
+        //效验是否超出
+        boolean b = checkSpeechComments(msgJson);
+        if (b) {
+            return "超出发言频率限制";
+        }
         try {
 
             String postUrl = "http://" + bot.getIp() + ":" + bot.getPort() + "/v1/LuaApiCaller?qq=" + bot.getBotId()
@@ -92,6 +109,43 @@ public class Action {
             e.printStackTrace();
         }
         return result;
+    }
+    /**
+     * 机器人发送控制
+     *
+     * @param msgJson 发送消息JSON实体
+     * @return 是否超出限制, true超出, false没有超出
+     */
+    public static boolean checkSpeechComments(JSONObject msgJson) {
+        //判断是不是发送消息接口
+        if (!"MessageSvc.PbSendMsg".equals(msgJson.getString("CgiCmd"))) {
+            return false;
+        }
+        //获取群号信息
+        Long groupCode = msgJson.getJSONObject("CgiRequest").getLong("ToUin");
+        //定义键值
+        String speechCommentsKey = "speech_comments:" + groupCode;
+        //判断键值是否存在
+        if (!redisCache.hasKey(speechCommentsKey)) {
+            //不存在,创建新的
+            redisCache.setCacheObject(speechCommentsKey, 1, 1, TimeUnit.MINUTES);
+            return false;
+        } else {
+            //获取键的有效时间,如果等于-1的话表示过期,将计数置1,设置有效时间一分钟
+            if (redisCache.getExpire(speechCommentsKey) == -1) {
+                redisCache.setCacheObject(speechCommentsKey, 1, 1, TimeUnit.MINUTES);
+                return false;
+            }
+            //得到存储的值
+            Integer count = redisCache.getCacheObject(speechCommentsKey);
+            //更新计数
+            redisCache.setCacheObject(speechCommentsKey, ++count, (int) redisCache.getExpire(speechCommentsKey), TimeUnit.SECONDS);
+            if (count > maxSpeechesPerMinute) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     /**

@@ -26,9 +26,22 @@ public class Bot {
     private Long botId;
 
     /**
+     * 发言频率控制
+     */
+    private Integer maxSpeechesPerMinute;
+
+    /**
      * 主人qq
      */
     private Long masterQq;
+
+    public Integer getMaxSpeechesPerMinute() {
+        return maxSpeechesPerMinute;
+    }
+
+    public void setMaxSpeechesPerMinute(Integer maxSpeechesPerMinute) {
+        this.maxSpeechesPerMinute = maxSpeechesPerMinute;
+    }
 
     public String getIp() {
         return ip;

@@ -1064,4 +1064,16 @@ CREATE TABLE `tb_tag_list`  (
 -- Records of tb_tag_list
 -- ----------------------------
 
+DROP TABLE IF EXISTS `tb_plugin_group`;
+CREATE TABLE `tb_plugin_group`  (
+                                    `group_code` bigint NULL DEFAULT NULL COMMENT '群号',
+                                    `group_name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '群名',
+                                    `plugin_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '插件id',
+                                    `admins` json NULL COMMENT '管理员',
+                                    INDEX `fk_group_code`(`group_code` ASC) USING BTREE,
+                                    INDEX `fk_plugin`(`plugin_id` ASC) USING BTREE,
+                                    CONSTRAINT `tb_plugin_group_ibfk_1` FOREIGN KEY (`group_code`) REFERENCES `tb_grouplist` (`group_code`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                    CONSTRAINT `tb_plugin_group_ibfk_2` FOREIGN KEY (`plugin_id`) REFERENCES `tb_plugins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
 SET FOREIGN_KEY_CHECKS = 1;

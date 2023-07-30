@@ -106,7 +106,7 @@
     <select id="existTable" parameterType="string" resultType="int">
         select COUNT(1) as flag
         from information_schema.TABLES
-        where TABLE_SCHEMA = 'opqj'
+        where TABLE_SCHEMA = 'opqjo'
           and TABLE_NAME = #{tableName};
     </select>
     <select id="selectOpqGroupMsgFlashback" resultMap="OpqGroupMsgMap" parameterType="OpqGroupMsg">
