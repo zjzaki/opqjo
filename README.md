@@ -3,6 +3,9 @@
 
 # 食用方法
 
+如果您使用过RuoYi-Vue那么您只需要关注opqj-core中的bot.properties中的OPQBot的相关配置, 项目部署和RuoYi-Vue一致
+博客链接: https://blog.zjzaki.com/archives/1691175347901
+
 ## 1.建库建表
 
 数据库建表语句在sql目录

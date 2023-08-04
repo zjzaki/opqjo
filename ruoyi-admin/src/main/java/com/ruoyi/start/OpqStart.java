@@ -29,7 +29,7 @@ public class OpqStart implements CommandLineRunner {
         //连接websocket
         opqWebSocket.connect();
         //加载插件
-        PluginLoader.getInstance().loadPluginJar();
+//        PluginLoader.getInstance().loadPluginJar();
     }
 
     @PreDestroy

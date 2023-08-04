@@ -139,7 +139,7 @@ public class Action {
             //得到存储的值
             Integer count = redisCache.getCacheObject(speechCommentsKey);
             //更新计数
-            redisCache.setCacheObject(speechCommentsKey, ++count, (int) redisCache.getExpire(speechCommentsKey), TimeUnit.SECONDS);
+            redisCache.setCacheObject(speechCommentsKey, ++count, (int) redisCache.getExpire(speechCommentsKey) + 1, TimeUnit.SECONDS);
             if (count > maxSpeechesPerMinute) {
                 return true;
             } else {

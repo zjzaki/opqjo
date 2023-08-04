@@ -53,9 +53,9 @@ public class OpqPluginController extends BaseController {
                 //调用业务层方法，插入数据库
                 opqPluginService.addPlugin(opqPlugin);
             }else if ("0".equals(plugin.getEnable())) {
-                instance.closeJarFile(i);
-                JarFile jarFile = jarFilesList.get(i);
-                String name = jarFile.getName();
+//                instance.closeJarFile(i);
+//                JarFile jarFile = jarFilesList.get(i);
+//                String name = jarFile.getName();
                 jarFilesList.remove(i);
                 opqPluginList.remove(i);
             }
