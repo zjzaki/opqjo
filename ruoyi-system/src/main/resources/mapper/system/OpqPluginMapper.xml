@@ -17,7 +17,7 @@
 
     <insert id="addPlugin" parameterType="OpqPlugin">
         insert into tb_plugins(id, name, `desc`, enable)
-        VALUES(#{id},#{name},#{desc},#{enable})
+        VALUES (#{id}, #{name}, #{desc}, #{enable})
     </insert>
 
     <select id="selectOpqPluginByName" parameterType="string" resultType="com.ruoyi.system.domain.OpqPlugin">
@@ -41,13 +41,14 @@
         select group_code, group_name, plugin_id, admins from tb_plugin_group
         <where>
             <if test="groupCode !=null and groupCode !=0">and group_code = #{groupCode}</if>
+            <if test="pluginId !=null and pluginId !=''">and plugin_id = #{pluginId}</if>
         </where>
     </select>
 
     <!--开启插件-->
     <insert id="addGroupPlugin" parameterType="OpqGroupPlugin">
         insert into tb_plugin_group(group_code, group_name, plugin_id)
-        VALUES(#{groupCode},#{groupName},#{pluginId})
+        VALUES (#{groupCode}, #{groupName}, #{pluginId})
     </insert>
 
     <insert id="addGroupPlugins" parameterType="OpqGroupPlugin">
@@ -60,6 +61,16 @@
 
     <!--关闭插件-->
     <delete id="deleteGroupPlugin" parameterType="long">
-        delete from tb_plugin_group where group_code = #{groupCode}
+        delete
+        from tb_plugin_group
+        where group_code = #{groupCode}
+    </delete>
+
+    <!--通过群号和插件id删除插件-->
+    <delete id="deleteGroupPluginByPluginIdAndGroupCode">
+        delete
+        from tb_plugin_group
+        where group_code = #{groupCode}
+          and plugin_id = #{pluginId}
     </delete>
 </mapper>

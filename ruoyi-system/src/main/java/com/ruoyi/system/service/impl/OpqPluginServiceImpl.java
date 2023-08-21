@@ -88,7 +88,7 @@ public class OpqPluginServiceImpl implements OpqPluginService {
         List<OpqGroupPlugin> newGroupPluginList = new ArrayList<>();
         //处理数据
         List<String> pluginIds = opqGroupPlugin.getPluginIds();
-        if(pluginIds.size()!=0){
+        if (pluginIds.size() != 0) {
             for (String pluginId : pluginIds) {
                 OpqGroupPlugin tempOpqGroupPlugin = new OpqGroupPlugin();
                 tempOpqGroupPlugin.setGroupCode(opqGroupPlugin.getGroupCode());
@@ -97,8 +97,20 @@ public class OpqPluginServiceImpl implements OpqPluginService {
                 newGroupPluginList.add(tempOpqGroupPlugin);
             }
             return opqPluginMapper.addGroupPlugins(newGroupPluginList);
-        }else{
+        } else {
             return code;
         }
+    }
+
+    /**
+     * 通过群号和插件id删除（关闭插件）
+     *
+     * @param groupCode
+     * @param pluginId
+     * @return 影响的行数
+     */
+    @Override
+    public int deleteGroupPluginByPluginIdAndGroupCode(Long groupCode, String pluginId) {
+        return opqPluginMapper.deleteGroupPluginByPluginIdAndGroupCode(groupCode, pluginId);
     }
 }

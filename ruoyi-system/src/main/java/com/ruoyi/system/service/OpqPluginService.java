@@ -2,6 +2,7 @@ package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.OpqGroupPlugin;
 import com.ruoyi.system.domain.OpqPlugin;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -51,5 +52,12 @@ public interface OpqPluginService {
      * @return 影响的行数
      */
     int addGroupPlugin(OpqGroupPlugin opqGroupPlugin);
+
+    /**
+     * 通过群号和插件id删除（关闭插件）
+     * @return 影响的行数
+     */
+    int deleteGroupPluginByPluginIdAndGroupCode(@Param("groupCode") Long groupCode, @Param("pluginId") String pluginId);
+
 
 }

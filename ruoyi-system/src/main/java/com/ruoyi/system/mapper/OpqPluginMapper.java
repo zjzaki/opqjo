@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.system.domain.OpqGroupPlugin;
 import com.ruoyi.system.domain.OpqPlugin;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -68,4 +69,10 @@ public interface OpqPluginMapper {
      * @return 影响的行数
      */
     int deleteGroupPlugin(Long groupCode);
+
+    /**
+     * 通过群号和插件id删除（关闭插件）
+     * @return 影响的行数
+     */
+    int deleteGroupPluginByPluginIdAndGroupCode(@Param("groupCode") Long groupCode,@Param("pluginId") String pluginId);
 }

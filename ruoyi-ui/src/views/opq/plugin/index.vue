@@ -24,52 +24,52 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['opq:group:add']"
-        >新增
-        </el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['opq:group:edit']"
-        >修改
-        </el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['opq:group:remove']"
-        >删除
-        </el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['opq:group:export']"
-        >导出
-        </el-button>
-      </el-col>
+      <!--<el-col :span="1.5">-->
+      <!--  &lt;!&ndash;<el-button&ndash;&gt;-->
+      <!--  &lt;!&ndash;  type="primary"&ndash;&gt;-->
+      <!--  &lt;!&ndash;  plain&ndash;&gt;-->
+      <!--  &lt;!&ndash;  icon="el-icon-plus"&ndash;&gt;-->
+      <!--  &lt;!&ndash;  size="mini"&ndash;&gt;-->
+      <!--  &lt;!&ndash;  @click="handleAdd"&ndash;&gt;-->
+      <!--  &lt;!&ndash;  v-hasPermi="['opq:group:add']"&ndash;&gt;-->
+      <!--  >新增-->
+      <!--  &lt;!&ndash;</el-button>&ndash;&gt;-->
+      <!--</el-col>-->
+      <!--<el-col :span="1.5">-->
+      <!--  <el-button-->
+      <!--    type="success"-->
+      <!--    plain-->
+      <!--    icon="el-icon-edit"-->
+      <!--    size="mini"-->
+      <!--    :disabled="single"-->
+      <!--    @click="handleUpdate"-->
+      <!--    v-hasPermi="['opq:plugin:edit']"-->
+      <!--  >修改-->
+      <!--  </el-button>-->
+      <!--</el-col>-->
+      <!--<el-col :span="1.5">-->
+      <!--  <el-button-->
+      <!--    type="danger"-->
+      <!--    plain-->
+      <!--    icon="el-icon-delete"-->
+      <!--    size="mini"-->
+      <!--    :disabled="multiple"-->
+      <!--    @click="handleDelete"-->
+      <!--    v-hasPermi="['opq:plugin:remove']"-->
+      <!--  >删除-->
+      <!--  </el-button>-->
+      <!--</el-col>-->
+      <!--<el-col :span="1.5">-->
+      <!--  <el-button-->
+      <!--    type="warning"-->
+      <!--    plain-->
+      <!--    icon="el-icon-download"-->
+      <!--    size="mini"-->
+      <!--    @click="handleExport"-->
+      <!--    v-hasPermi="['opq:plugin:export']"-->
+      <!--  >导出-->
+      <!--  </el-button>-->
+      <!--</el-col>-->
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -104,19 +104,27 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['opq:group:edit']"
-          >修改
+            icon="el-icon-s-data"
+            @click="handleGroupPlugin(scope.row)"
+            v-hasPermi="['opq:plugin:groupList']"
+          >开启的群聊
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['opq:group:remove']"
-          >删除
-          </el-button>
+          <!--<el-button-->
+          <!--  size="mini"-->
+          <!--  type="text"-->
+          <!--  icon="el-icon-edit"-->
+          <!--  @click="handleUpdate(scope.row)"-->
+          <!--  v-hasPermi="['opq:plugin:edit']"-->
+          <!--&gt;修改-->
+          <!--</el-button>-->
+          <!--<el-button-->
+          <!--  size="mini"-->
+          <!--  type="text"-->
+          <!--  icon="el-icon-delete"-->
+          <!--  @click="handleDelete(scope.row)"-->
+          <!--  v-hasPermi="['opq:plugin:remove']"-->
+          <!--&gt;删除-->
+          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -130,22 +138,22 @@
     />
 
     <!-- 添加或修改群组对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="群名" prop="groupName">
-          <el-input v-model="form.groupName" type="textarea" placeholder="请输入内容"/>
-        </el-form-item>
-        <el-form-item label="总人数" prop="memberCnt">
-          <el-input v-model="form.memberCnt" placeholder="请输入总人数"/>
-        </el-form-item>
-        <el-form-item label="群最高人数" prop="groupCnt">
-          <el-input v-model="form.groupCnt" placeholder="请输入群最高人数"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
+    <el-dialog :title="title" :visible.sync="groupPluginOpen" width="500px" append-to-body>
+      <el-table
+        :data="tableGroupPluginData"
+        style="width: 100%">
+        <el-table-column label="群号" width="180" prop="groupCode"/>
+        <el-table-column label="群名" width="180" prop="groupName"/>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleGroupPluginDelete(scope.$index, scope.row)">删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-dialog>
   </div>
 </template>
@@ -153,7 +161,13 @@
 <script>
 import {refreshGroup, listGroup, getGroup, delGroup, addGroup, updateGroup} from "@/api/opq/group";
 import {sendGroupText} from "@/api/opq/action";
-import {listPlugin, refreshPlugin} from "../../../api/opq/plugin";
+import {
+  deleteGroupPlugin,
+  listGroupPlugin,
+  listGroupPluginByPluginId,
+  listPlugin,
+  refreshPlugin
+} from "../../../api/opq/plugin";
 
 
 export default {
@@ -186,7 +200,9 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {}
+      rules: {},
+      groupPluginOpen: false,
+      tableGroupPluginData: []
     };
   },
   created() {
@@ -300,17 +316,45 @@ export default {
         }
       });
     },
-    // 用户状态修改
+    /** 用户状态修改*/
     handleEnableChange(row) {
       let text = row.enable === "1" ? "启用" : "停用";
-      this.$modal.confirm('确认要"' + text + '""' + row.name + '"插件吗？').then(function() {
+      this.$modal.confirm('确认要"' + text + '""' + row.name + '"插件吗？').then(function () {
         return changeUserStatus(row.userId, row.status);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
-      }).catch(function() {
+      }).catch(function () {
         row.enable = row.enable === "0" ? "1" : "0";
       });
     },
+    /**打开开启当前插件的页面*/
+    handleGroupPlugin(row) {
+      //清理数据
+      this.tableGroupPluginData = [];
+      //打开页面
+      this.groupPluginOpen = true;
+      //发送请求
+      listGroupPluginByPluginId(row.id).then(response => {
+        console.log(response)
+        if (response.code == 200) {
+          this.tableGroupPluginData = response.rows;
+        } else {
+          this.$modal.msgError("状态码：" + response.code + "--" + response.msg);
+        }
+      })
+    },
+    /**删除开启当前插件的群聊*/
+    handleGroupPluginDelete(index, row) {
+      deleteGroupPlugin(row.groupCode, row.pluginId).then(response => {
+        if (response.code == 200) {
+          this.$modal.msgSuccess(response.msg);
+          //移除数据
+          this.tableGroupPluginData.splice(index, 1)
+        } else {
+          this.$modal.msgError("状态码：" + response.code + "--" + response.msg);
+        }
+      })
+    }
   }
 };
 </script>
